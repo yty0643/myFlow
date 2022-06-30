@@ -1,7 +1,7 @@
 .app{
     position: relative;
     display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    height: 100vh;
+    flex-direction: column;
+    width: calc(100vw - (100vw - 100%));
+    padding-top: 4rem;
 }

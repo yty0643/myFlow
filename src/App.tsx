@@ -1,12 +1,18 @@
 import React from 'react';
 import logo from './logo.svg';
 import styles from './App.module.css';
-import Box from './components/box/box';
+import Slidebar from './sections/slidebar/sliderbar';
+import Navbar from './sections/navbar/navbar';
+import Flow from './sections/flow/flow';
+import Sign from './sections/sign/sign';
 
 function App() {
   return (
     <div className={styles.app}>
-      <Box />
+      <Navbar />
+      <Sign />
+      <Flow />
+      <Slidebar />
     </div>
   );
 }
