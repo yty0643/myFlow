@@ -1,7 +1,4 @@
 .app{
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: calc(100vw - (100vw - 100%));
-    padding-top: 4rem;
+    background-color: rgb(38, 41, 43);
+    background-color: rgb(219, 228, 234);
 }

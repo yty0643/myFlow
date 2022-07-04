@@ -1,18 +1,11 @@
-import React, { RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import SecBtn from '../../components/secBtn/secBtn';
 import styles from './navbar.module.css';
-
-export interface IOnClick{
-    (): void;
-};
 
 const Navbar = () => {
     const [isActive, setIsActive] = useState<boolean>(true);
     const [height, setHeight] = useState<number>(0);
-    const divRef = useRef<HTMLDivElement>(null);
 
-    const onClick: IOnClick = () => {
-    };
 
     useEffect(() => {
         const scroll = () => {
@@ -29,8 +22,8 @@ const Navbar = () => {
     }, []);
 
     return (
-        <div className={`${styles.navbar} ${isActive && styles.active}`} ref={divRef}>
-            <SecBtn onClick={onClick} />
+        <div className={`${styles.navbar} ${isActive && styles.active}`}>
+            <SecBtn  />
         </div>
     );
 };

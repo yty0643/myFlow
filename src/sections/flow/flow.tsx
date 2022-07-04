@@ -3,9 +3,9 @@ import styles from './flow.module.css';
 
 const Flow = () => {
     return (
-        <div className={styles.section}>
+        <section className={styles.section} >
             
-        </div>
+        </section>
     );
 };
 

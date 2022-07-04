@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './sign.module.css';
 
 const Sign = () => {
+
     return (
-        <div className={styles.section}>
+        <div className={styles.section} >
             
         </div>
     );

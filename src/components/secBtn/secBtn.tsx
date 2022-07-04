@@ -1,10 +1,9 @@
 import React, { useRef } from 'react';
-import { IOnClick } from '../../sections/navbar/navbar';
 
-const SecBtn = ({ onClick }: { onClick: IOnClick }) => {
+const SecBtn = ({ }) => {
     
     return (
-        <button onClick={() => { onClick() }}>
+        <button>
             signIn
         </button>
     );

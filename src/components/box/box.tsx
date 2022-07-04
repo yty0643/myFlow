@@ -1,52 +1,47 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import styles from './box.module.css';
+import React from 'react';
+import styled from 'styled-components';
+import { lighten, darken } from 'polished'
+import { isWhiteSpaceLike } from 'typescript';
 
-interface ICoord{
-    x: number,
-    y: number,
+interface IDivProps{
+    color: string;
+    // aa?: boolean;
 };
+  
+const Div = styled.div<IDivProps>`
+    width: 5rem;
+    height: 5rem;
+    background: ${props => props.color};
+    border-radius: 50%;
 
-const Box = () => {
-    const divRef = useRef<HTMLDivElement>(null);
-    const [clickCoord, setClickCoord] = useState<ICoord>({x:0, y:0});
-    const [mouseCoord, setMouseCoord] = useState<ICoord>({x:0, y:0});
-    const [isClick, setIsClick] = useState<boolean>(false);
+    ${({ theme, color }) => {
+        const selected = theme.colors[color];
+        return `
+    background: ${selected};
+    &:hover{
+        background: ${lighten(0.05, selected)};
+    }
+    &:active{
+        background: ${darken(0.05, selected)};
+    }
+    `
+    }}
 
-    const mouseMove = useCallback((event: MouseEvent): void => {
-        setMouseCoord({
-            x: event.clientX,
-            y: event.clientY,
-        });
-    }, []);
+    & + & {
+    margin-left: 1rem;
+    }
+`;
 
-    useEffect(() => {
-        if (isClick)
-            window.addEventListener("mousemove", mouseMove);
-        else
-            window.removeEventListener("mousemove", mouseMove );
-    }, [isClick]);
-
-    useEffect(() => {
-        if (!divRef.current) return;
-        divRef.current.style.left = mouseCoord.x-clickCoord.x + 'px';
-        divRef.current.style.top = mouseCoord.y-clickCoord.y + 'px';
-    }, [mouseCoord]);
-
+const Box = ({ ...rest }: { color: string }) => {
     return (
-        <div
-            ref={divRef}
-            className={styles.box}
-            onMouseDown={(event) => {
-                setIsClick(true);
-                setClickCoord({
-                    x: event.nativeEvent.offsetX,
-                    y: event.nativeEvent.offsetY,
-                });
-            }}
-            onMouseUp={() => { setIsClick(false) }}
-        >
-        </div>
+        <Div {...rest}>
+
+        </Div>
     );
 };
+
+Box.defaultProps = {
+    color: 'white',
+}
 
 export default Box;

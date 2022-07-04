@@ -1,19 +1,18 @@
 import React from 'react';
-import logo from './logo.svg';
-import styles from './App.module.css';
-import Slidebar from './sections/slidebar/sliderbar';
-import Navbar from './sections/navbar/navbar';
-import Flow from './sections/flow/flow';
-import Sign from './sections/sign/sign';
+import styled, { ThemeProvider } from 'styled-components';
+import { theme } from './styles/theme';
+import { darken, lighten } from 'polished';
+import Box from './components/box/box';
+
 
 function App() {
   return (
-    <div className={styles.app}>
-      <Navbar />
-      <Sign />
-      <Flow />
-      <Slidebar />
-    </div>
+    <ThemeProvider
+      theme={theme}>
+      <Box />
+      <Box color="white"/>
+      <Box color="black"/>
+    </ThemeProvider>
   );
 }
 
