@@ -23,18 +23,43 @@ export interface IOnClick {
 function App() {
   const [refArr] = useState<RefObject<HTMLElement>[]>(Array(2).fill(null).map(() => createRef()));
   const isDark = useAppSelector(state => state.theme.isActive);
-
+  const [focusIdx, setFocusIdx] = useState<number>(-1);
+  
   const onClick: IOnClick = (idx) => {
     refArr[idx].current?.scrollIntoView({
       behavior: 'smooth',
     });
   }
 
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting)
+          refArr.forEach((ref, index) => {
+            if (ref.current == entry.target)
+              setFocusIdx(index);
+          });
+      });
+    }, {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.7,
+    });
+
+    refArr.forEach(ref => {
+      observer.observe(ref.current!);
+    });
+
+    return () => {
+      observer.disconnect();
+    }
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle isDark={isDark} />
       <Div>
-        <Navbar onClick={onClick} />
+        <Navbar focusIdx={focusIdx} onClick={onClick} />
         <Sign secRef={refArr[0]}/>
         <Flow secRef={refArr[1]}/>
       </Div>

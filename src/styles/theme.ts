@@ -24,6 +24,7 @@ const theme: DefaultTheme = {
   textColor: {
     white: 'rgb(255, 255, 255)',
     black: 'rgb(0, 0, 0)',
+    blue: 'rgb(29, 161, 242)',
   }
 };
 

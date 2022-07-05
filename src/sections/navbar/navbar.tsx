@@ -39,7 +39,7 @@ const Div = styled.div`
     align-items: center;
 `
 
-const Navbar = ({ onClick }: { onClick: IOnClick }) => {
+const Navbar = ({ focusIdx, onClick }: { focusIdx: number, onClick: IOnClick }) => {
     const isDark = useAppSelector(state => state.theme.isActive);
     const [isActive, setIsActive] = useState<boolean>(true);
     const [height, setHeight] = useState<number>(0);
@@ -65,7 +65,7 @@ const Navbar = ({ onClick }: { onClick: IOnClick }) => {
                 logo
             </div>
             <Div>
-                {sections.map((item, index) => <SecBtn key={index} index={index} onClick={onClick}>{item}</SecBtn>)}
+                {sections.map((item, index) => <SecBtn key={index} isActive={index == focusIdx} index={index} onClick={onClick}>{item}</SecBtn>)}
                 <ThemeToggle />
             </Div>
         </Header>

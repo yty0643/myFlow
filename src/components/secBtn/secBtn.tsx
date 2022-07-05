@@ -2,14 +2,21 @@ import React from 'react';
 import styled from 'styled-components';
 import { IOnClick } from '../../App';
 
-const Button = styled.button`
+interface IButton{
+    isActive: boolean;
+}
+
+const Button = styled.button<IButton>`
     margin-right: 1rem;
+    ${({ theme, isActive }) => isActive && `
+    color: ${theme.textColor.blue};
+    `}
 `
 
-const SecBtn = ({ children, index, onClick }: { children: string, index: number, onClick: IOnClick }) => {
+const SecBtn = ({ isActive, children, index, onClick }: { isActive:boolean, children: string, index: number, onClick: IOnClick }) => {
 
     return (
-        <Button onClick={() => { onClick(index) }}>
+        <Button isActive={isActive} onClick={() => { onClick(index) }}>
             {children}
         </Button>
     );
