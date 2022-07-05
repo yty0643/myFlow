@@ -12,12 +12,11 @@ export const themeSlice = createSlice({
     name: "theme",
     initialState,
     reducers: {
-        toggle: (state) => {
+        onToggle: (state) => {
             state.isActive = !state.isActive;
         },
     },
 });
 
-export const { toggle } = themeSlice.actions;
-
+export const { onToggle } = themeSlice.actions;
 export default themeSlice.reducer;

@@ -3,19 +3,19 @@ import styled from 'styled-components';
 import { lighten, darken } from 'polished'
 import { isWhiteSpaceLike } from 'typescript';
 
-interface IDivProps{
+interface IDiv{
     color: string;
     // aa?: boolean;
 };
   
-const Div = styled.div<IDivProps>`
+const Div = styled.div<IDiv>`
     width: 5rem;
     height: 5rem;
     background: ${props => props.color};
     border-radius: 50%;
 
     ${({ theme, color }) => {
-        const selected = theme.colors[color];
+        const selected = theme.sectionColors.sign[color];
         return `
     background: ${selected};
     &:hover{

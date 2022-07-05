@@ -4,8 +4,14 @@ import 'styled-components';
 // and extend them!
 declare module 'styled-components' {
   export interface DefaultTheme {
-    colors: {
+    sectionColors: {
+      [key: string]: { [key: string]: string };
+    };
+    toggleColors: {
       [key: string]: string;
     };
+    textColor: {
+      [key: string]: string;
+    }
   }
 } 

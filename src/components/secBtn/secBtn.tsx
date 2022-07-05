@@ -1,12 +1,18 @@
-import React, { useRef } from 'react';
+import React from 'react';
+import styled from 'styled-components';
+import { IOnClick } from '../../App';
 
-const SecBtn = ({ }) => {
-    
+const Button = styled.button`
+    margin-right: 1rem;
+`
+
+const SecBtn = ({ children, index, onClick }: { children: string, index: number, onClick: IOnClick }) => {
+
     return (
-        <button>
-            signIn
-        </button>
+        <Button onClick={() => { onClick(index) }}>
+            {children}
+        </Button>
     );
 };
 
-export default SecBtn;
+export default React.memo(SecBtn);
