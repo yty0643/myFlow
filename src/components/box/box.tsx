@@ -1,47 +1,28 @@
-import React from 'react';
+import React, { RefObject } from 'react';
 import styled from 'styled-components';
-import { lighten, darken } from 'polished'
-import { isWhiteSpaceLike } from 'typescript';
+import { IBox } from '../../sections/flow/flow';
 
 interface IDiv{
-    color: string;
-    // aa?: boolean;
-};
-  
+}
+
 const Div = styled.div<IDiv>`
-    width: 5rem;
-    height: 5rem;
-    background: ${props => props.color};
-    border-radius: 50%;
+position: absolute;
+top:0;
+left:0;
+width: 11.2rem;
+height 7rem;
+background-color: rgb(200,200,200);
+&:hover{
+    background-color: rgb(220,220,220);
+}
+`
 
-    ${({ theme, color }) => {
-        const selected = theme.sectionColors.sign[color];
-        return `
-    background: ${selected};
-    &:hover{
-        background: ${lighten(0.05, selected)};
-    }
-    &:active{
-        background: ${darken(0.05, selected)};
-    }
-    `
-    }}
-
-    & + & {
-    margin-left: 1rem;
-    }
-`;
-
-const Box = ({ ...rest }: { color: string }) => {
+const Box = ({ boxRef }: { boxRef: RefObject<HTMLDivElement> }) => {
     return (
-        <Div {...rest}>
-
+        <Div ref={boxRef} >
+           
         </Div>
     );
 };
-
-Box.defaultProps = {
-    color: 'white',
-}
 
 export default Box;

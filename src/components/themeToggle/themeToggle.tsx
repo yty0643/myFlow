@@ -16,13 +16,17 @@ const Button = styled.button<IButton>`
     border-radius: 2em;
     width: 5rem;
     height: 2rem;
-
-    ${({ theme, isDark }) => {
-    const bgColor = theme.toggleColors[isDark ? 'bgDark' : 'bgLight'];
-    return `
-        background-color: ${bgColor};
+    
+    ${({ theme, isDark }) => isDark ?
     `
-    }}
+    background-color: rgb(63, 73, 81);
+    `
+    :
+    `
+    background-color: rgb(185, 218, 239);
+    `
+}}
+    
 
    
 

@@ -8,13 +8,16 @@ interface ISection{
 
 const Section = styled.section<ISection>`
     height: calc(100vh);
-    ${({ theme, isDark }) => {
-        const color = theme.sectionColors.sign[isDark ? "black" : "white"];
-        return `    
-            background-color: ${color};
-        `
-    }}
     transition: all ease-in 100ms;
+    ${({ theme, isDark }) => isDark ?
+    `
+    background-color: ${theme.sectionColors.sign['dark']}
+    `
+    :
+    `
+    background-color: ${theme.sectionColors.sign['light']}
+    `
+    }}
 `
 
 const Sign = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {

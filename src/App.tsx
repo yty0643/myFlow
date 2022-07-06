@@ -5,7 +5,6 @@ import { GlobalStyle } from './styles/global';
 import Navbar from './sections/navbar/navbar';
 import Sign from './sections/sign/sign';
 import Flow from './sections/flow/flow';
-import Slidebar from './sections/slidebar/sliderbar';
 import { useAppSelector } from './app/hooks';
 
 const Div = styled.div`

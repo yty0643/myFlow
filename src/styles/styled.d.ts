@@ -13,5 +13,8 @@ declare module 'styled-components' {
     textColor: {
       [key: string]: string;
     }
+    boxColor: {
+      [key: string]: string;
+    }
   }
 } 
