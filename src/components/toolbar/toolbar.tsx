@@ -1,6 +1,6 @@
 import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import styled from 'styled-components';
 import { lighten, darken } from 'polished'
 
@@ -15,6 +15,7 @@ width: 15rem;
 height: 100%;
 padding: 1rem;
 background-color: rgb(240,240,240);
+box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 `
 
 const Button = styled.button`
@@ -30,30 +31,29 @@ font-size: 1rem;
 background-color: rgb(240,240,240);
 transition: all ease-in 100ms;
 &:hover{
-    background-color: ${lighten(0.03,'rgb(240,240,240)')};
+    background-color: ${lighten(0.03, 'rgb(240,240,240)')};
 }
 &:active{
-    background-color: ${darken(0.03,'rgb(240,240,240)')};
+    background-color: ${darken(0.03, 'rgb(240,240,240)')};
 }
 `
+
 const Toolbar = () => {
     const divRef = useRef<HTMLDivElement>(null);
 
-    const onDragStart = (event: React.DragEvent<HTMLButtonElement>) => {
-        console.log("onDragStart");
-        event.dataTransfer.setDragImage(new Image(), event.nativeEvent.offsetX, event.nativeEvent.offsetY);
-    }
-
-    const onDrag = (event: React.DragEvent<HTMLButtonElement>) => {
+    const onMouseMove = useCallback((event: MouseEvent) => {
         if (!event.pageX || !divRef.current) return;
         const cmp = divRef.current.getBoundingClientRect().left - event.pageX;
         const width = divRef.current.clientWidth;
-        divRef.current.style.width = width + cmp + 'px';
-    }
+        divRef.current.style.width = width + cmp + 10 + 'px';
+    }, []);
     
     return (
         <Div ref={divRef}>
-            <Button draggable={true} onDragStart={onDragStart} onDrag={onDrag} >
+            {/* <Button draggable={true} onDragStart={onDragStart} onDrag={onDrag} > */}
+            <Button
+                onMouseDown={() => { document.addEventListener('mousemove', onMouseMove) }}
+                onMouseUp={() => { document.removeEventListener('mousemove', onMouseMove) }}>
                 <FontAwesomeIcon icon={faGripLinesVertical} />
             </Button>
         </Div>

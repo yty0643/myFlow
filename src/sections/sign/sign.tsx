@@ -7,6 +7,8 @@ interface ISection{
 }
 
 const Section = styled.section<ISection>`
+z-index: 1;
+position: relative;
     height: calc(100vh);
     transition: all ease-in 100ms;
     ${({ theme, isDark }) => isDark ?

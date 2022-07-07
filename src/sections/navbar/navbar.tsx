@@ -21,7 +21,6 @@ justify-content: space-between;
 width: 100%;
 height: 2rem;
 padding: 0 20%;
-box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
 transition: all ease-in 100ms;
 ${({ isActive }) => isActive && `
     height:4rem;
@@ -34,6 +33,7 @@ ${({ theme, isDark }) => isDark ?
     `
     :
     `
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     background-color: ${theme.sectionColors.navbar['light']}
     `
 }}

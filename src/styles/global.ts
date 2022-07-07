@@ -15,7 +15,6 @@ export const GlobalStyle = createGlobalStyle<IGS>`
         }}
     }
 
-
     body {
         margin: 0;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -53,4 +52,5 @@ export const GlobalStyle = createGlobalStyle<IGS>`
         background-color: transparent;
         cursor: pointer;
     }
+
 `

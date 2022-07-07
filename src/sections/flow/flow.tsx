@@ -13,7 +13,6 @@ z-index: 0;
 position: relative;
 transition: all ease-in 100ms;
 width: 100%;
-
 ${({ theme, isDark }) => isDark ?
 `
 background-color: ${theme.sectionColors.flow['dark']}
