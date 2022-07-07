@@ -3,25 +3,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useCallback, useRef } from 'react';
 import styled from 'styled-components';
 import { lighten, darken } from 'polished'
+import Tool from '../tool/tool';
+
 
 const Div = styled.div`
-position: absolute;
-top: 0;
-right: 0;
+z-index: 2;
+position:relative;
 display: flex;
-flex-direction: column;
-align-items: center;
 width: 15rem;
 height: 100%;
-padding: 1rem;
 background-color: rgb(240,240,240);
 box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 `
 
 const Button = styled.button`
-position: absolute;
-top: 0;
-left: 0;
 display:flex;
 justify-content: center;
 align-items: center;
@@ -38,11 +33,17 @@ transition: all ease-in 100ms;
 }
 `
 
+const List = styled.div`
+    width: 100%;
+    overflow-y: scroll;
+`
+
 const Toolbar = () => {
     const divRef = useRef<HTMLDivElement>(null);
+    const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-    const onMouseMove = useCallback((event: MouseEvent) => {
-        if (!event.pageX || !divRef.current) return;
+    const resize = useCallback((event: MouseEvent) => {
+        if (!divRef.current) return;
         const cmp = divRef.current.getBoundingClientRect().left - event.pageX;
         const width = divRef.current.clientWidth;
         divRef.current.style.width = width + cmp + 10 + 'px';
@@ -50,12 +51,17 @@ const Toolbar = () => {
     
     return (
         <Div ref={divRef}>
-            {/* <Button draggable={true} onDragStart={onDragStart} onDrag={onDrag} > */}
             <Button
-                onMouseDown={() => { document.addEventListener('mousemove', onMouseMove) }}
-                onMouseUp={() => { document.removeEventListener('mousemove', onMouseMove) }}>
+                onMouseDown={() => { document.addEventListener('mousemove', resize) }}
+                onMouseUp={() => { document.removeEventListener('mousemove', resize) }}>
                 <FontAwesomeIcon icon={faGripLinesVertical} />
             </Button>
+            <List>
+                {arr.map((item, index) =>
+                    <Tool key={index} />
+                )}
+            </List>
+            
         </Div>
     );
 };

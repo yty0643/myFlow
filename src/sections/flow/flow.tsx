@@ -1,4 +1,4 @@
-import React, { RefObject, useRef, useState } from 'react';
+import React, { RefObject, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../app/hooks';
 import Box from '../../components/box/box';
@@ -9,9 +9,8 @@ interface ISection{
 }
 
 const Section = styled.section<ISection>`
-z-index: 0;
-position: relative;
 transition: all ease-in 100ms;
+display:flex;
 width: 100%;
 ${({ theme, isDark }) => isDark ?
 `
@@ -24,12 +23,10 @@ background-color: ${theme.sectionColors.flow['ligth']}
 }}
 `
 
-const Div = styled.div`
+const Palette = styled.div`
+    flex: 1 1 auto;
     position: relative;
-    display: flex;
-    width: 5rem;
-    height: 5rem;
-    background-color: skyblue;
+
 `
 
 export interface IBox{
@@ -37,14 +34,28 @@ export interface IBox{
     y: number,
 }
 
-// boxRef.current!.style.left = event.pageX+'px';
-// boxRef.current!.style.top = event.pageY - secRef.current!.offsetTop + 'px';
-
 const Flow = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
     const isDark = useAppSelector(state => state.theme.isActive);
+    const [box, setBox] = useState<IBox[]>([]);
+
+    const onDrop = (event: React.DragEvent) => {
+        setBox((prev) => {
+            const temp = [...prev];
+            temp.push({
+                x: event.nativeEvent.offsetX,
+                y: event.nativeEvent.offsetY,
+            });
+            return temp;
+        })
+    }
 
     return (
-        <Section isDark={isDark} ref={secRef}>
+        <Section ref={secRef} isDark={isDark}>
+            <Palette
+                onDragOver={(event) => { event.preventDefault(); }}
+                onDrop={onDrop}>
+                {box.map((item, index) => <Box key={index} coord={item} />)}
+                </Palette>
             <Toolbar />
         </Section>
     );
