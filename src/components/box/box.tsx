@@ -1,7 +1,7 @@
 import React, { RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { domainToUnicode } from 'url';
-import { IBox } from '../../sections/flow/flow';
+import { IBox, IOnClick } from '../../sections/flow/flow';
 
 interface IDiv{
 }
@@ -19,7 +19,7 @@ background-color: skyblue;
 }
 `
 
-const Box = ({ paletteRef, coord }: { paletteRef: RefObject<HTMLDivElement>, coord: IBox }) => {
+const Box = ({ item, paletteRef, onClick  }: { item: IBox, paletteRef: RefObject<HTMLDivElement>, onClick: IOnClick}) => {
     const divRef = useRef<HTMLDivElement>(null);
     
     const onMouseDown = (event: React.MouseEvent) => {
@@ -67,14 +67,16 @@ const Box = ({ paletteRef, coord }: { paletteRef: RefObject<HTMLDivElement>, coo
         const shiftX = box.offsetWidth / 2;
         const shiftY = box.offsetHeight / 2;
 
-        box.style.left = Math.round((coord.x - shiftX) / palette.offsetWidth * 100) + '%';
-        box.style.top = Math.round((coord.y - palette.offsetTop - shiftY) / palette.offsetHeight * 100) + '%';
+        box.style.left = Math.round((item.x - shiftX) / palette.offsetWidth * 100) + '%';
+        box.style.top = Math.round((item.y - palette.offsetTop - shiftY) / palette.offsetHeight * 100) + '%';
     }, []);
 
     return (
         <Div
             ref={divRef}
-            onMouseDown={onMouseDown}>
+            onMouseDown={onMouseDown}
+            onClick={() => { onClick(divRef) }}>
+            ddd
         </Div>
     );
 };

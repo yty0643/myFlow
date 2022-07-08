@@ -1,6 +1,6 @@
 import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useCallback, useRef } from 'react';
+import React, { RefObject, useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { lighten, darken } from 'polished'
 import Tool from '../tool/tool';
@@ -33,12 +33,17 @@ transition: all ease-in 100ms;
 }
 `
 
-const List = styled.div`
-    width: 100%;
-    overflow-y: scroll;
+const Tools = styled.div`
+width: 100%;
+overflow-y: scroll;
 `
 
-const Toolbar = () => {
+const Styles = styled.div`
+width: 100%;
+overflow-y: scroll;
+`
+
+const Toolbar = ({ selectedRef }: { selectedRef: RefObject<HTMLDivElement> | null }) => {
     const divRef = useRef<HTMLDivElement>(null);
     const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -48,6 +53,12 @@ const Toolbar = () => {
         const width = divRef.current.clientWidth;
         divRef.current.style.width = width + cmp + 10 + 'px';
     }, []);
+
+    useEffect(() => {
+        if (!selectedRef) return;
+        console.log(selectedRef.current?.style.backgroundColor);
+
+    }, [selectedRef]);
     
     return (
         <Div ref={divRef}>
@@ -56,12 +67,17 @@ const Toolbar = () => {
                 onMouseUp={() => { document.removeEventListener('mousemove', resize) }}>
                 <FontAwesomeIcon icon={faGripLinesVertical} />
             </Button>
-            <List>
-                {arr.map((item, index) =>
-                    <Tool key={index} />
-                )}
-            </List>
-            
+            {selectedRef ?
+                <Styles>
+                    
+                </Styles>
+                :
+                <Tools>
+                    {arr.map((item, index) =>
+                        <Tool key={index} />
+                    )}
+                </Tools>
+            }
         </Div>
     );
 };

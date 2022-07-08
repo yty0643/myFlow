@@ -16,13 +16,13 @@ divRef.current.style.width = width + cmp + 10 + 'px';
 
 vs
 
-    const onDragStart = (event: React.DragEvent<HTMLButtonElement>) => {
-        event.dataTransfer.setDragImage(new Image(), event.nativeEvent.offsetX, event.nativeEvent.offsetY);
-    }
+const onDragStart = (event: React.DragEvent<HTMLButtonElement>) => {
+event.dataTransfer.setDragImage(new Image(), event.nativeEvent.offsetX, event.nativeEvent.offsetY);
+}
 
-    const onDrag = (event: React.DragEvent<HTMLButtonElement>) => {
-        if (!event.pageX || !divRef.current) return;
-        const cmp = divRef.current.getBoundingClientRect().left - event.pageX;
-        const width = divRef.current.clientWidth;
-        divRef.current.style.width = width + cmp + 10 + 'px';
-    }
+const onDrag = (event: React.DragEvent<HTMLButtonElement>) => {
+if (!event.pageX || !divRef.current) return;
+const cmp = divRef.current.getBoundingClientRect().left - event.pageX;
+const width = divRef.current.clientWidth;
+divRef.current.style.width = width + cmp + 10 + 'px';
+}

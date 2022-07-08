@@ -34,14 +34,18 @@ export interface IBox{
     y: number,
 }
 
+export interface IOnClick{
+    (box: RefObject<HTMLDivElement>): void;
+}
 
 const Flow = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
     const isDark = useAppSelector(state => state.theme.isActive);
-    const [box, setBox] = useState<IBox[]>([]);
+    const [boxes, setBoxes] = useState<IBox[]>([]);
+    const [selectedRef, setSelectedRef] = useState<RefObject<HTMLDivElement>|null>(null);
     const paletteRef = useRef<HTMLDivElement>(null);
 
     const onDrop = (event: React.DragEvent) => {
-        setBox((prev) => {
+        setBoxes((prev) => {
             const temp = [...prev];
             temp.push({
                 x: event.pageX,
@@ -50,16 +54,26 @@ const Flow = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
             return temp;
         })
     }
+
+    const boxClick:IOnClick = (ref) => {
+        setSelectedRef(ref);
+    }
+
+    const onClick = (event: React.MouseEvent) => {
+        if (event.target == paletteRef.current)
+            setSelectedRef(null);
+    }
     
     return (
         <Section ref={secRef} isDark={isDark}>
             <Palette
                 ref={paletteRef}
                 onDragOver={(event) => { event.preventDefault(); }}
-                onDrop={onDrop}>
-                {box.map((item, index) => <Box key={index} paletteRef={paletteRef} coord={item} />)}
+                onDrop={onDrop}
+                onClick={onClick}>
+                {boxes.map((item, index) => <Box key={index} item={item} paletteRef={paletteRef} onClick={boxClick} />)}
             </Palette>
-            <Toolbar />
+            <Toolbar selectedRef={selectedRef} />
         </Section>
     );
 };
