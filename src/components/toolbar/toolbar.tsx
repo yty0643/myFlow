@@ -7,7 +7,7 @@ import Tool from '../tool/tool';
 
 
 const Div = styled.div`
-z-index: 2;
+z-index: 3;
 position:relative;
 display: flex;
 width: 15rem;

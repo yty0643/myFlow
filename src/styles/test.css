@@ -2,5 +2,6 @@
     background-color: rgb(120, 144, 154);
     display: flex;
     box-shadow: rgb(39, 41, 44) 3px 3px 6px 0px inset, rgba(0, 0, 0, 0.5) -3px -3px 6px 1px inset;
+    pointer-events: all; 
 }
 

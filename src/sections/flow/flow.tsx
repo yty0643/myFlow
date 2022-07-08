@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect, useState} from 'react';
+import React, { RefObject, useEffect, useRef, useState} from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../app/hooks';
 import Box from '../../components/box/box';
@@ -34,28 +34,31 @@ export interface IBox{
     y: number,
 }
 
+
 const Flow = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
     const isDark = useAppSelector(state => state.theme.isActive);
     const [box, setBox] = useState<IBox[]>([]);
+    const paletteRef = useRef<HTMLDivElement>(null);
 
     const onDrop = (event: React.DragEvent) => {
         setBox((prev) => {
             const temp = [...prev];
             temp.push({
-                x: event.nativeEvent.offsetX,
-                y: event.nativeEvent.offsetY,
+                x: event.pageX,
+                y: event.pageY,
             });
             return temp;
         })
     }
-
+    
     return (
         <Section ref={secRef} isDark={isDark}>
             <Palette
+                ref={paletteRef}
                 onDragOver={(event) => { event.preventDefault(); }}
                 onDrop={onDrop}>
-                {box.map((item, index) => <Box key={index} coord={item} />)}
-                </Palette>
+                {box.map((item, index) => <Box key={index} paletteRef={paletteRef} coord={item} />)}
+            </Palette>
             <Toolbar />
         </Section>
     );

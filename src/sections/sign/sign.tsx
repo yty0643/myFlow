@@ -7,7 +7,7 @@ interface ISection{
 }
 
 const Section = styled.section<ISection>`
-z-index: 3;
+z-index: 4;
 position: relative;
     height: calc(100vh);
     transition: all ease-in 100ms;
