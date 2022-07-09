@@ -5,13 +5,15 @@ import styled from 'styled-components';
 import { lighten, darken } from 'polished'
 import Tool from '../tool/tool';
 
-
 const Div = styled.div`
 z-index: 3;
-position:relative;
+position:absolute;
+top: 0;
+right: 0;
 display: flex;
 width: 15rem;
-height: 100%;
+height: calc(100% - 3rem);
+margin: 1.5rem;
 background-color: rgb(240,240,240);
 box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 `

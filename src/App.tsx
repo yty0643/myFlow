@@ -4,7 +4,7 @@ import { theme } from './styles/theme';
 import { GlobalStyle } from './styles/global';
 import Navbar from './sections/navbar/navbar';
 import Sign from './sections/sign/sign';
-import Flow from './sections/flow/flow';
+import Flow from './sections/chart/chart';
 import { useAppSelector } from './app/hooks';
 
 const Div = styled.div`

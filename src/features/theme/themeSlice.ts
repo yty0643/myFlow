@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-interface ITheme{
+interface IThemeinit{
     isActive: boolean
 };
 
-const initialState: ITheme = {
+const initialState: IThemeinit = {
     isActive: false,
 };
 
