@@ -33,17 +33,12 @@ transition: all ease-in 100ms;
 }
 `
 
-const Tools = styled.div`
+const List = styled.div`
 width: 100%;
 overflow-y: scroll;
 `
 
-const Styles = styled.div`
-width: 100%;
-overflow-y: scroll;
-`
-
-const Toolbar = ({ selectedRef }: { selectedRef: RefObject<HTMLDivElement> | null }) => {
+const Tools = () => {
     const divRef = useRef<HTMLDivElement>(null);
     const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -53,12 +48,6 @@ const Toolbar = ({ selectedRef }: { selectedRef: RefObject<HTMLDivElement> | nul
         const width = divRef.current.clientWidth;
         divRef.current.style.width = width + cmp + 10 + 'px';
     }, []);
-
-    useEffect(() => {
-        if (!selectedRef) return;
-        console.log(selectedRef.current?.style.backgroundColor);
-
-    }, [selectedRef]);
     
     return (
         <Div ref={divRef}>
@@ -67,19 +56,13 @@ const Toolbar = ({ selectedRef }: { selectedRef: RefObject<HTMLDivElement> | nul
                 onMouseUp={() => { document.removeEventListener('mousemove', resize) }}>
                 <FontAwesomeIcon icon={faGripLinesVertical} />
             </Button>
-            {selectedRef ?
-                <Styles>
-                    
-                </Styles>
-                :
-                <Tools>
-                    {arr.map((item, index) =>
-                        <Tool key={index} />
-                    )}
-                </Tools>
-            }
+            <List>
+                {arr.map((item, index) =>
+                    <Tool key={index} />
+                )}
+            </List>
         </Div>
     );
 };
 
-export default Toolbar;
+export default Tools;

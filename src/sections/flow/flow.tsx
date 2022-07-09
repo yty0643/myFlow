@@ -1,8 +1,8 @@
-import React, { RefObject, useEffect, useRef, useState} from 'react';
+import React, { RefObject, useRef, useState} from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../app/hooks';
-import Box from '../../components/box/box';
-import Toolbar from '../../components/toolbar/toolbar';
+import Palette from '../../components/palette/palette';
+import Tools from '../../components/tools/tools';
 
 interface ISection{
     isDark: boolean;
@@ -23,15 +23,11 @@ background-color: ${theme.sectionColors.flow['ligth']}
 }}
 `
 
-const Palette = styled.div`
-    flex: 1 1 auto;
-    position: relative;
-
-`
-
 export interface IBox{
     x: number,
     y: number,
+    title: string,
+    description: string,
 }
 
 export interface IOnClick{
@@ -40,40 +36,11 @@ export interface IOnClick{
 
 const Flow = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
     const isDark = useAppSelector(state => state.theme.isActive);
-    const [boxes, setBoxes] = useState<IBox[]>([]);
-    const [selectedRef, setSelectedRef] = useState<RefObject<HTMLDivElement>|null>(null);
-    const paletteRef = useRef<HTMLDivElement>(null);
-
-    const onDrop = (event: React.DragEvent) => {
-        setBoxes((prev) => {
-            const temp = [...prev];
-            temp.push({
-                x: event.pageX,
-                y: event.pageY,
-            });
-            return temp;
-        })
-    }
-
-    const boxClick:IOnClick = (ref) => {
-        setSelectedRef(ref);
-    }
-
-    const onClick = (event: React.MouseEvent) => {
-        if (event.target == paletteRef.current)
-            setSelectedRef(null);
-    }
     
     return (
         <Section ref={secRef} isDark={isDark}>
-            <Palette
-                ref={paletteRef}
-                onDragOver={(event) => { event.preventDefault(); }}
-                onDrop={onDrop}
-                onClick={onClick}>
-                {boxes.map((item, index) => <Box key={index} item={item} paletteRef={paletteRef} onClick={boxClick} />)}
-            </Palette>
-            <Toolbar selectedRef={selectedRef} />
+            <Palette />
+            <Tools />
         </Section>
     );
 };

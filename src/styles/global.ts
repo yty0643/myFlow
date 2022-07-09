@@ -53,4 +53,9 @@ export const GlobalStyle = createGlobalStyle<IGS>`
         cursor: pointer;
     }
 
+    p{
+        margin: 0;
+        padding: 0;
+    }
+
 `

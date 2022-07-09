@@ -47,16 +47,13 @@ align-items: center;
 const Navbar = ({ focusIdx, onClick }: { focusIdx: number, onClick: IOnClick }) => {
     const isDark = useAppSelector(state => state.theme.isActive);
     const [isActive, setIsActive] = useState<boolean>(true);
-    const [height, setHeight] = useState<number>(0);
     const sections = ['Sign', 'Flow'];
 
     useEffect(() => {
+        let prevY = 0;
         const scroll = () => {
-            if (!(window.scrollY > 64)) return;
-            setHeight((prev) => {
-                setIsActive(prev > window.scrollY);
-                return window.scrollY;
-            });
+            setIsActive(prevY > window.scrollY);
+            prevY = window.scrollY;
         };
         window.addEventListener("scroll", scroll);
         return () => {
@@ -70,7 +67,14 @@ const Navbar = ({ focusIdx, onClick }: { focusIdx: number, onClick: IOnClick }) 
                 logo
             </div>
             <Div>
-                {sections.map((item, index) => <SecBtn key={index} isActive={index == focusIdx} index={index} onClick={onClick}>{item}</SecBtn>)}
+                {sections.map((item, index) =>
+                    <SecBtn
+                        key={index}
+                        isActive={index == focusIdx}
+                        index={index} onClick={onClick}>
+                        {item}
+                    </SecBtn>
+                )}
                 <ThemeToggle />
             </Div>
         </Header>

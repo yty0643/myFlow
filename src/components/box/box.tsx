@@ -1,7 +1,8 @@
-import React, { RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { faDatabase } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { RefObject, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { domainToUnicode } from 'url';
-import { IBox, IOnClick } from '../../sections/flow/flow';
+import { IBox } from '../../sections/flow/flow';
 
 interface IDiv{
 }
@@ -12,14 +13,42 @@ position: absolute;
 top:0;
 left:0;
 width: 11.2rem;
-height 7rem;
-background-color: skyblue;
+height: 7rem;
+background-color: white;
+box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 &:hover{
-    background-color: rgb(220,220,220);
+    background-color: rgb(245,245,245);
 }
 `
 
-const Box = ({ item, paletteRef, onClick  }: { item: IBox, paletteRef: RefObject<HTMLDivElement>, onClick: IOnClick}) => {
+const Title = styled.div`
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 0.5px solid rgb(220,220,220);
+`
+
+const Desc = styled.div`
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+`
+
+const Icon = styled.p`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 1rem; 
+`
+
+// background-color: #e5e5f7;
+// opacity: 0.8;
+// background-image:  linear-gradient(#444cf7 1px, transparent 1px), linear-gradient(to right, #444cf7 1px, #e5e5f7 1px);
+// background-size: 20px 20px;
+
+const Box = ({ item, paletteRef }: { item: IBox, paletteRef: RefObject<HTMLDivElement> }) => {
     const divRef = useRef<HTMLDivElement>(null);
     
     const onMouseDown = (event: React.MouseEvent) => {
@@ -74,9 +103,16 @@ const Box = ({ item, paletteRef, onClick  }: { item: IBox, paletteRef: RefObject
     return (
         <Div
             ref={divRef}
-            onMouseDown={onMouseDown}
-            onClick={() => { onClick(divRef) }}>
-            ddd
+            onMouseDown={onMouseDown}>
+            <Title>
+                <Icon>
+                    <FontAwesomeIcon icon={faDatabase} />
+                </Icon>
+                <p>title</p>
+            </Title>
+            <Desc>
+                <p>description</p>
+            </Desc>
         </Div>
     );
 };
