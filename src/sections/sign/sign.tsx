@@ -32,4 +32,4 @@ const Sign = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
     );
 };
 
-export default Sign;
+export default React.memo(Sign);

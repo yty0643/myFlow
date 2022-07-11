@@ -43,12 +43,17 @@ const Icon = styled.p`
 
 const Symbol = ({ index, item, onMouseDown }: { index: number, item: ISymbol, onMouseDown: IOnMouseDown }) => {
     const divRef = useRef<HTMLDivElement>(null);
-    
+
     useEffect(() => {
         if (!divRef.current) return;
         divRef.current.style.left = item.x - divRef.current.offsetWidth / 2 + 'px';
         divRef.current.style.top = item.y - divRef.current.offsetHeight / 2 + 'px';
     }, []);
+
+    useEffect(() => {
+        console.log(item);
+        console.log("rendering!");
+    }, [index]);
     
     return (
         <Div
@@ -58,10 +63,10 @@ const Symbol = ({ index, item, onMouseDown }: { index: number, item: ISymbol, on
                 <Icon>
                     <FontAwesomeIcon icon={faDatabase} />
                 </Icon>
-                <p>title</p>
+                <p>{item.values.title}</p>
             </Title>
             <Desc>
-                <p>description</p>
+                <p>{item.values.description}</p>
             </Desc>
         </Div>
     );

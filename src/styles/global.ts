@@ -47,7 +47,6 @@ export const GlobalStyle = createGlobalStyle<IGS>`
     input{
         margin: 0;
         padding: 0;
-        border: none;
         outline: none;
         background-color: transparent;
         cursor: pointer;

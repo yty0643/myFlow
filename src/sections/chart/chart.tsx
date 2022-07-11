@@ -1,9 +1,10 @@
-import React, { RefObject } from 'react';
+import React, { RefObject, useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Symbol from '../../components/symbol/symbol';
-import Tools from '../../components/tools/tools';
-import { ISymbol, setSymbols } from '../../features/symbols/symbolsSlice';
+import Toolbar from '../toolbar/toolbar';
+import { setSymbols } from '../../features/symbols/symbolsSlice';
+import { setSelected } from '../../features/selected/selectedSlice';
 
 interface ISection{
     isDark: boolean;
@@ -41,14 +42,27 @@ const Flow = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
         temp.push({
             x: Math.round(event.pageX),
             y: Math.round(event.pageY - secRef.current.offsetTop),
-            title: "title",
-            description: "description",
+            values: {
+                title: "title",
+                description: "description",
+            }
         });
         dispatch(setSymbols(temp));
     };
 
+    const onDragOver = (event: React.DragEvent) => {
+        event.preventDefault();
+    };
+
+    const onClick = (event: React.MouseEvent) => {
+        if (event.target == secRef.current)
+            dispatch(setSelected(-1));
+    };
+
     const onMouseDown: IOnMouseDown = (event, index, ref) => {
         if (!secRef.current || !ref.current) return;
+        dispatch(setSelected(index));
+
         const section = secRef.current;
         const symbol = ref.current;
         symbol.style.zIndex = '3';
@@ -63,7 +77,6 @@ const Flow = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
             if (x < 0 || x + symbol.offsetWidth >= section.offsetWidth || y < 0 || y + symbol.offsetHeight >= section.offsetHeight) return;
             symbol.style.left = x + 'px';
             symbol.style.top = y + 'px';
-            
         };
 
         document.addEventListener('mousemove', moveAt);
@@ -73,8 +86,8 @@ const Flow = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
             const temp = [...symbols];
             temp[index] = {
                 ...temp[index],
-                x : Math.round(event.pageX - shiftX),
-                y : Math.round(event.pageY - shiftY - section.offsetTop),
+                x: Math.round(event.pageX - shiftX),
+                y: Math.round(event.pageY - shiftY - section.offsetTop),
             }
             dispatch(setSymbols(temp));
             document.removeEventListener('mousemove', moveAt);
@@ -82,28 +95,32 @@ const Flow = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
         symbol.onmouseleave = (event: MouseEvent) => {
             symbol.style.zIndex = '1';
             document.removeEventListener('mousemove', moveAt);
+            symbol.onmouseleave = null;
         };
-        symbol.ondragstart = ((event: MouseEvent) => {
+        symbol.ondragstart = (event: MouseEvent) => {
             event.preventDefault();
-        });
+        };
     };
-    
+
     return (
         <Section
             ref={secRef}
             isDark={isDark}
-            onDragOver={(event) => { event.preventDefault(); }}
-            onDrop={onDrop}>
+            onDragOver={onDragOver}
+            onDrop={onDrop}
+            onClick={onClick}>
             {symbols.map((item, index) =>
                 <Symbol
                     key={index}
                     index={index}
                     item={item}
-                    onMouseDown={onMouseDown}/>
+                    onMouseDown={onMouseDown} />
             )}
-            <Tools />
+            <Toolbar />
         </Section>
     );
 };
 
-export default Flow;
+
+
+export default React.memo(Flow);
