@@ -36,7 +36,8 @@ const Styles = () => {
 
     return (
         <Div>
-            {Object.keys(symbols[selectedIdx].values).map((key, index) => (
+            <p>Index: {selectedIdx}</p>
+            {symbols && Object.keys(symbols[selectedIdx].values).map((key, index) => (
                 <div key={index}>
                     <p>{key}</p>
                     <input

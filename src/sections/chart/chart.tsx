@@ -17,11 +17,11 @@ width: 100%;
 transition: all ease-in 100ms;
 ${({ theme, isDark }) => isDark ?
 `
-background-color: ${theme.sectionColors.flow['dark']}
+background-color: ${theme.sectionColors.chart['dark']};
 `
 :
 `
-background-color: ${theme.sectionColors.flow['ligth']}
+background-color: ${theme.sectionColors.chart['light']};
 `
 }}
 `
@@ -35,7 +35,6 @@ const Flow = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
     const isDark = useAppSelector(state => state.theme.isActive);
     const symbols = useAppSelector(state => state.symbols.symbols);
     const dispatch = useAppDispatch();
-
     const onDrop = (event: React.DragEvent) => {
         if (!secRef.current || !(secRef.current == event.target)) return;
         const temp = [...symbols];
@@ -86,8 +85,8 @@ const Flow = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
             const temp = [...symbols];
             temp[index] = {
                 ...temp[index],
-                x: Math.round(event.pageX - shiftX),
-                y: Math.round(event.pageY - shiftY - section.offsetTop),
+                x: Math.round(event.pageX),
+                y: Math.round(event.pageY - section.offsetTop),
             }
             dispatch(setSymbols(temp));
             document.removeEventListener('mousemove', moveAt);
@@ -108,7 +107,7 @@ const Flow = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
             isDark={isDark}
             onDragOver={onDragOver}
             onDrop={onDrop}
-            onClick={onClick}>
+            onMouseDown={onClick}>
             {symbols.map((item, index) =>
                 <Symbol
                     key={index}

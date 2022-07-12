@@ -14,8 +14,8 @@ const Button = styled.button<IButton>`
     align-items: center;
     justify-content: center;
     border-radius: 2em;
-    width: 5rem;
-    height: 2rem;
+    width: 4rem;
+    height: 1.5rem;
     
     ${({ theme, isDark }) => isDark ?
     `
@@ -26,10 +26,6 @@ const Button = styled.button<IButton>`
     background-color: rgb(185, 218, 239);
     `
 }}
-    
-
-   
-
     ::before{
         ${({ isDark }) => isDark ? 
             `
@@ -47,15 +43,15 @@ const Button = styled.button<IButton>`
         display: flex;
         top: 0;
         transform : translateX(-50%);
-        line-height: 2rem;
+        line-height: 1.5rem;
         transition: all ease-in 200ms;
     }
 
     ::after{
         content: '';
         z-index: 1;
-        width: 1.6rem;
-        height: 1.6rem;
+        width: 1.2rem;
+        height: 1.2rem;
         border-radius: 50%;
         transition: all ease-in 200ms;
         position: relative;
@@ -63,12 +59,12 @@ const Button = styled.button<IButton>`
         ${({ theme,isDark }) => isDark ? 
             `
                 background-color: ${theme.toggleColors.dark};
-                left: calc(0.8rem - 2.3rem);
+                left: calc(0.6rem - 1.9rem);
             `
             :
             `
                 background-color: ${theme.toggleColors.light};
-                left: calc(-0.8rem + 2.3rem);
+                left: calc(-0.6rem + 1.9rem);
             `
         }
     }

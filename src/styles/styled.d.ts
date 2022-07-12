@@ -13,7 +13,7 @@ declare module 'styled-components' {
     textColor: {
       [key: string]: string;
     }
-    boxColor: {
+    symbolColor: {
       [key: string]: string;
     }
   }
