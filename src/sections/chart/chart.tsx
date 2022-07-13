@@ -1,4 +1,4 @@
-import React, { RefObject, useState } from 'react';
+import React, { RefObject, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Symbol from '../../components/symbol/symbol';
@@ -26,15 +26,21 @@ background-color: ${theme.sectionColors.chart['light']};
 }}
 `
 
-export interface IOnMouseDown{
+export interface ISymbolHandler{
     (event: React.MouseEvent, index: number, ref:RefObject<HTMLDivElement>): void
 };
 
+export interface IFlowHandler{
+    (event: React.MouseEvent, index: number, btnIdx:number): void
+};
 
 const Flow = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
     const isDark = useAppSelector(state => state.theme.isActive);
     const symbols = useAppSelector(state => state.symbols.symbols);
     const dispatch = useAppDispatch();
+    const [start, setStart] = useState<number[]>([]);
+    const [flow, setFlow] = useState<number[][][]>([]);
+
     const onDrop = (event: React.DragEvent) => {
         if (!secRef.current || !(secRef.current == event.target)) return;
         const temp = [...symbols];
@@ -53,15 +59,14 @@ const Flow = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
         event.preventDefault();
     };
 
-    const onClick = (event: React.MouseEvent) => {
+    const onMouseDown = (event: React.MouseEvent) => {
         if (event.target == secRef.current)
             dispatch(setSelected(-1));
     };
 
-    const onMouseDown: IOnMouseDown = (event, index, ref) => {
+    const symbolHandler: ISymbolHandler = (event, index, ref) => {
         if (!secRef.current || !ref.current) return;
         dispatch(setSelected(index));
-
         const section = secRef.current;
         const symbol = ref.current;
         symbol.style.zIndex = '3';
@@ -90,6 +95,7 @@ const Flow = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
             }
             dispatch(setSymbols(temp));
             document.removeEventListener('mousemove', moveAt);
+            symbol.onmouseup = null;
         };
         symbol.onmouseleave = (event: MouseEvent) => {
             symbol.style.zIndex = '1';
@@ -101,25 +107,53 @@ const Flow = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
         };
     };
 
+    const flowStart: IFlowHandler = (event, index, btnIdx) => {
+        event.stopPropagation();
+        setStart([index, btnIdx]);
+    };
+
+    const flowEnd: IFlowHandler = (event, index, btnIdx) => {
+        event.stopPropagation();
+        if (start[0] == index) return;
+
+        setFlow(prev => {
+            const temp = [...prev];
+            console.log(temp[1]);
+            temp[start[0]][start[1]] = [index, btnIdx];
+            return temp;
+        });
+    };
+
+    useEffect(() => {
+        const size = symbols.length;
+        setFlow(Array(size).fill(Array(4).fill(Array(2).fill(-1))));
+    }, [symbols]);
+
+    useEffect(() => {
+        flow.forEach((symbol, symbolIdx) => {
+
+        })
+    }, [flow]);
+
     return (
         <Section
             ref={secRef}
             isDark={isDark}
             onDragOver={onDragOver}
             onDrop={onDrop}
-            onMouseDown={onClick}>
+            onMouseDown={onMouseDown} >
             {symbols.map((item, index) =>
                 <Symbol
                     key={index}
                     index={index}
                     item={item}
-                    onMouseDown={onMouseDown} />
+                    symbolHandler={symbolHandler}
+                    flowStart={flowStart}
+                    flowEnd={flowEnd} />
             )}
             <Toolbar />
         </Section>
     );
 };
-
-
 
 export default React.memo(Flow);

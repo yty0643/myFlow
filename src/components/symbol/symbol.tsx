@@ -5,7 +5,7 @@ import React, { RefObject, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../app/hooks';
 import { ISymbol } from '../../features/symbols/symbolsSlice';
-import { IOnMouseDown } from '../../sections/chart/chart';
+import { IFlowHandler, ISymbolHandler } from '../../sections/chart/chart';
 
 interface IDiv{
     isDark: boolean,
@@ -95,7 +95,7 @@ ${({ idx }) => {
             left: 0;
             `
     }
-} }
+}}
 width: 0.9rem;
 height: 0.9rem;
 border: 0.2rem solid white;
@@ -110,7 +110,7 @@ background-color: rgb(0,0,0);
 }
 `
 
-const Symbol = ({ index, item, onMouseDown }: { index: number, item: ISymbol, onMouseDown: IOnMouseDown }) => {
+const Symbol = ({ index, item, symbolHandler, flowStart, flowEnd }: { index: number, item: ISymbol, symbolHandler: ISymbolHandler, flowStart: IFlowHandler, flowEnd: IFlowHandler}) => {
     const isDark = useAppSelector(state => state.theme.isActive);
     const selectedIdx = useAppSelector(state => state.selected.index);
     const divRef = useRef<HTMLDivElement>(null);
@@ -121,19 +121,11 @@ const Symbol = ({ index, item, onMouseDown }: { index: number, item: ISymbol, on
         divRef.current.style.top = item.y - divRef.current.offsetHeight / 2 + 'px';
     }, []);
 
-    useEffect(() => {
-        
-    }, []);
-
-    const temp = (event: React.MouseEvent) => {
-        event.stopPropagation();
-    }
-    
     return (
         <Div
             isDark={isDark}
             ref={divRef}
-            onMouseDown={(event) => { onMouseDown(event, index, divRef) }}>
+            onMouseDown={(event) => { symbolHandler(event, index, divRef) }}>
             <Upper>
                 <Icon>
                     <FontAwesomeIcon icon={faDatabase} />
@@ -146,7 +138,14 @@ const Symbol = ({ index, item, onMouseDown }: { index: number, item: ISymbol, on
             <Lower>
                 <p>{item.values.description}</p>
             </Lower>
-            {selectedIdx > -1 && Array(4).fill(0).map((item, idx) => <Button key={idx} idx={idx} onMouseDown={temp} />)}
+            {selectedIdx > -1 && Array(4).fill(0).map((item, idx) =>
+                <Button
+                    id={`${idx}`}
+                    key={idx}
+                    idx={idx}
+                    onMouseDown={(event) => { flowStart(event, index, idx) }}
+                    onMouseUp={(event) => { flowEnd(event, index, idx) }} />
+            )}
         </Div>
     );
 };

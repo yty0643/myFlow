@@ -38,6 +38,7 @@ export const GlobalStyle = createGlobalStyle<IGS>`
         outline: none;
         background-color: transparent;
         cursor: pointer;
+        font-family: 'Mulish', sans-serif;
     }
 
     input{
@@ -46,6 +47,7 @@ export const GlobalStyle = createGlobalStyle<IGS>`
         outline: none;
         background-color: transparent;
         cursor: pointer;
+        font-family: 'Mulish', sans-serif;        
     }
 
     p{
