@@ -31,38 +31,37 @@ function App() {
     });
   }
 
-  // useEffect(() => {
-  //   const observer = new IntersectionObserver((entries, observer) => {
-  //     entries.forEach((entry) => {
-  //       if (entry.isIntersecting)
-  //         refArr.forEach((ref, index) => {
-  //           if (ref.current == entry.target)
-  //             setFocusIdx(index);
-  //         });
-  //     });
-  //   }, {
-  //     root: null,
-  //     rootMargin: '0px',
-  //     threshold: 0.7,
-  //   });
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting)
+          refArr.forEach((ref, index) => {
+            if (ref.current == entry.target)
+              setFocusIdx(index);
+          });
+      });
+    }, {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.7,
+    });
 
-  //   refArr.forEach(ref => {
-  //     observer.observe(ref.current!);
-  //   });
+    refArr.forEach(ref => {
+      observer.observe(ref.current!);
+    });
 
-  //   return () => {
-  //     observer.disconnect();
-  //   }
-  // }, []);
+    return () => {
+      observer.disconnect();
+    }
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle isDark={isDark} />
       <Div>
-        {/* <Navbar focusIdx={focusIdx} onClick={onClick} />
+        <Navbar focusIdx={focusIdx} onClick={onClick} />
         <Sign secRef={refArr[0]}/>
-        <Flow secRef={refArr[1]}/> */}
-        <Test />
+        <Flow secRef={refArr[1]}/>
       </Div>
     </ThemeProvider>
   );

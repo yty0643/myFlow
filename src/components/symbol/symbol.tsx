@@ -110,7 +110,7 @@ background-color: rgb(0,0,0);
 }
 `
 
-const Symbol = ({ index, item, symbolHandler, flowStart, flowEnd }: { index: number, item: ISymbol, symbolHandler: ISymbolHandler, flowStart: IFlowHandler, flowEnd: IFlowHandler}) => {
+const Symbol = ({ index, item, symbolHandler }: { index: number, item: ISymbol, symbolHandler: ISymbolHandler }) => {
     const isDark = useAppSelector(state => state.theme.isActive);
     const selectedIdx = useAppSelector(state => state.selected.index);
     const divRef = useRef<HTMLDivElement>(null);
@@ -138,14 +138,9 @@ const Symbol = ({ index, item, symbolHandler, flowStart, flowEnd }: { index: num
             <Lower>
                 <p>{item.values.description}</p>
             </Lower>
-            {selectedIdx > -1 && Array(4).fill(0).map((item, idx) =>
-                <Button
-                    id={`${idx}`}
-                    key={idx}
-                    idx={idx}
-                    onMouseDown={(event) => { flowStart(event, index, idx) }}
-                    onMouseUp={(event) => { flowEnd(event, index, idx) }} />
-            )}
+            {selectedIdx > -1 &&
+                <Button idx={0}/>
+            }
         </Div>
     );
 };

@@ -50,7 +50,7 @@ const Test = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.beginPath();
             ctx.moveTo(startX, startY);
-            ctx.lineTo(endX, endY);
+            ctx.bezierCurveTo(endX, startY, startX, endY, endX, endY);
             ctx.stroke();
         };
 

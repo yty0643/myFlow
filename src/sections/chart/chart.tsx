@@ -38,8 +38,6 @@ const Flow = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
     const isDark = useAppSelector(state => state.theme.isActive);
     const symbols = useAppSelector(state => state.symbols.symbols);
     const dispatch = useAppDispatch();
-    const [start, setStart] = useState<number[]>([]);
-    const [flow, setFlow] = useState<number[][][]>([]);
 
     const onDrop = (event: React.DragEvent) => {
         if (!secRef.current || !(secRef.current == event.target)) return;
@@ -107,33 +105,6 @@ const Flow = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
         };
     };
 
-    const flowStart: IFlowHandler = (event, index, btnIdx) => {
-        event.stopPropagation();
-        setStart([index, btnIdx]);
-    };
-
-    const flowEnd: IFlowHandler = (event, index, btnIdx) => {
-        event.stopPropagation();
-        if (start[0] == index) return;
-
-        setFlow(prev => {
-            const temp = [...prev];
-            console.log(temp[1]);
-            temp[start[0]][start[1]] = [index, btnIdx];
-            return temp;
-        });
-    };
-
-    useEffect(() => {
-        const size = symbols.length;
-        setFlow(Array(size).fill(Array(4).fill(Array(2).fill(-1))));
-    }, [symbols]);
-
-    useEffect(() => {
-        flow.forEach((symbol, symbolIdx) => {
-
-        })
-    }, [flow]);
 
     return (
         <Section
@@ -147,9 +118,7 @@ const Flow = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
                     key={index}
                     index={index}
                     item={item}
-                    symbolHandler={symbolHandler}
-                    flowStart={flowStart}
-                    flowEnd={flowEnd} />
+                    symbolHandler={symbolHandler}/>
             )}
             <Toolbar />
         </Section>
@@ -157,3 +126,5 @@ const Flow = ({ secRef }: { secRef: RefObject<HTMLElement> }) => {
 };
 
 export default React.memo(Flow);
+
+// event.stopPropagation();
