@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import Symbol from '../components/symbol';
 import { setSymbols } from '../features/symbols/symbolsSlice';
-import Toolbar from './toolbar';
 
 const Section = styled.section`
 position: relative;
@@ -17,10 +16,16 @@ background-color: grey;
 const Chart = () => {
     const symbols = useAppSelector(state => state.symbols.symbols);
     const dispatch = useAppDispatch();
+    const start = useAppSelector(state => state.flow.start);
+    const end = useAppSelector(state => state.flow.end);
 
     useEffect(() => {
         dispatch(setSymbols([{ x: 0, y: 0 }, { x: 100, y: 100 }])); //임시
     }, []);
+
+    useEffect(() => {
+        console.log(start, end);
+    }, [start, end]);
 
     return (
         <Section>
@@ -30,7 +35,6 @@ const Chart = () => {
                     index={index}
                     value={value} />
             )}
-            {/* <Toolbar /> */}
         </Section>
     );
 };

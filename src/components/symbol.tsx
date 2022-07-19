@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch } from '../app/hooks';
 import { ISymbol, setSymbol } from '../features/symbols/symbolsSlice';
+import FlowBtns from './flowBtns';
 
 const Div = styled.div`
 position: absolute;
@@ -47,6 +48,7 @@ const Symbol = ({ value, index }: { value: ISymbol, index: number }) => {
                 },
                 index
             }));
+            document.onmouseup = null;
         };
         symbol.ondragstart = () => {
             return false;
@@ -64,9 +66,9 @@ const Symbol = ({ value, index }: { value: ISymbol, index: number }) => {
         <Div
             ref={ref}
             onMouseDown={onMouseDown}>
-            
+            <FlowBtns index={index} />
         </Div>
     );
 };
 
-export default Symbol;
+export default React.memo(Symbol);
