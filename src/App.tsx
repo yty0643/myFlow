@@ -3,6 +3,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import { theme } from './styles/theme';
 import { GlobalStyle } from './styles/global';
 import { useAppSelector } from './app/hooks';
+import Chart from './sections/chart';
 
 const Div = styled.div`
   display: flex;
@@ -23,7 +24,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <GlobalStyle isDark={isDark} />
       <Div>
-        
+        <Chart />
       </Div>
     </ThemeProvider>
   );

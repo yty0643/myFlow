@@ -3,9 +3,6 @@ import { createSlice } from '@reduxjs/toolkit';
 export interface ISymbol{
     x: number,
     y: number,
-    values: {
-        [key: string]: string;
-    }
 }
 
 interface ISymbolsInit{
@@ -22,9 +19,12 @@ export const symbolsSlice = createSlice({
     reducers: {
         setSymbols: (state, action) => {
             state.symbols = action.payload;
+        },
+        setSymbol: (state, action) => {
+            state.symbols[action.payload.index] = action.payload.symbol;
         }
     },
 });
 
-export const { setSymbols } = symbolsSlice.actions;
+export const { setSymbols, setSymbol} = symbolsSlice.actions;
 export default symbolsSlice.reducer;
