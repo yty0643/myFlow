@@ -1,4 +1,4 @@
-import { flowSlice } from './../features/flow/flowSlice';
+import { flowsSlice } from '../features/flows/flowsSlice';
 import { selectedSlice } from './../features/selected/selectedSlice';
 import { symbolsSlice } from './../features/symbols/symbolsSlice';
 import { themeSlice } from './../features/theme/themeSlice';
@@ -9,7 +9,7 @@ export const store = configureStore({
     theme: themeSlice.reducer,
     symbols: symbolsSlice.reducer,
     selected: selectedSlice.reducer,
-    flow: flowSlice.reducer,
+    flows: flowsSlice.reducer,
   },
 });
 

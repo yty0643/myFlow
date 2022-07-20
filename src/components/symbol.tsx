@@ -1,26 +1,72 @@
-import React, { useEffect, useRef } from 'react';
+import React, { createRef, RefObject, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch } from '../app/hooks';
+import { setEnd, setStart } from '../features/flows/flowsSlice';
 import { ISymbol, setSymbol } from '../features/symbols/symbolsSlice';
-import FlowBtns from './flowBtns';
 
-const Div = styled.div`
+interface IDiv{
+    width: number,
+    height: number,
+}
+
+const Div = styled.div<IDiv>`
 position: absolute;
 top: 0;
 left: 0;
 display: flex;
-width: 100px;
-height: 100px;
+${({ width, height }) => `
+width: ${width}px;
+height: ${height}px;
+`
+}
+
 background-color: skyblue;
 `
 
-const Symbol = ({ value, index }: { value: ISymbol, index: number }) => {
-    const ref = useRef<HTMLDivElement>(null);
+interface IButton{
+    index: number,
+}
+
+const Button = styled.button<IButton>`
+position: absolute;
+${({index}) => {
+    switch (index) {
+        case 0:
+            return `
+            top: 0;
+            left: 50%;
+            `;
+        case 1:
+            return `
+            top: 50%;
+            left: 100%;
+            `;
+        case 2:
+            return `
+            top: 100%;
+            left: 50%;
+            `;
+        case 3:
+            return `
+            top: 50%;
+            left: 0;
+            `;
+    }
+}}
+width: 10px;
+height: 10px;
+background-color: black;
+transform: translate(-50%, -50%);
+`
+
+const Symbol = ({ divRef, value, index }: { divRef: RefObject<HTMLDivElement>, value: ISymbol, index: number }) => {
     const dispatch = useAppDispatch();
+    const btnArr = [0, 1, 2, 3];
 
     const onMouseDown = (event: React.MouseEvent) => {
-        if (!ref.current) return;
-        const symbol = ref.current;
+        event.stopPropagation();
+        if (!divRef.current) return;
+        const symbol = divRef.current;
         const shiftX = event.nativeEvent.offsetX;
         const shiftY = event.nativeEvent.offsetY;
         const topY = event.currentTarget.parentElement!.offsetTop;
@@ -43,6 +89,7 @@ const Symbol = ({ value, index }: { value: ISymbol, index: number }) => {
             document.removeEventListener('mousemove', move);
             dispatch(setSymbol({ // 변경사항 최종 저장. 추후 DB에 저장해야 함.
                 symbol: {
+                    ...value,
                     x: symbol.offsetLeft,
                     y: symbol.offsetTop,
                 },
@@ -55,18 +102,40 @@ const Symbol = ({ value, index }: { value: ISymbol, index: number }) => {
         }
     };
 
+    const onBtnDown = (event: React.MouseEvent) => {
+        event.stopPropagation();
+        dispatch(setStart([index, Number(event.currentTarget.id)]));
+        dispatch(setEnd([]));
+    };
+
+    const onBtnUp = (event: React.MouseEvent) => {
+        event.stopPropagation();
+        dispatch(setEnd([index, Number(event.currentTarget.id)]));
+    }
+
     useEffect(() => {
-        if (!ref.current) return;
-        const symbol = ref.current;
+        if (!divRef || !divRef.current) return;
+        const symbol = divRef.current;
         symbol.style.left = value.x + "px";
         symbol.style.top = value.y + "px";
-    }, []);
+    }, [divRef]);
 
     return (
         <Div
-            ref={ref}
-            onMouseDown={onMouseDown}>
-            <FlowBtns index={index} />
+            ref={divRef}
+            onMouseDown={onMouseDown}
+            width={value.width}
+            height={value.height}>
+            {btnArr.map((value, index) =>
+                <Button
+                    key={index}
+                    id={`${index}`}
+                    index={index}
+                    onMouseDown={onBtnDown}
+                    onMouseUp={onBtnUp}
+                    onDragStart={() => { return false }}
+                />
+            )}
         </Div>
     );
 };

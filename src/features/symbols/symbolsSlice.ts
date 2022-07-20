@@ -3,6 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 export interface ISymbol{
     x: number,
     y: number,
+    width: number,
+    height: number,
 }
 
 interface ISymbolsInit{
