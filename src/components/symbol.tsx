@@ -80,6 +80,8 @@ const Symbol = ({ divRef, value, index }: { divRef: RefObject<HTMLDivElement>, v
             y = y < 0 ? 0 : y;
             x = x > maxX ? maxX : x;
             y = y > maxY ? maxY : y;
+            x = Math.round(x / 10) * 10;
+            y = Math.round(y / 10) * 10;
             symbol.style.left = x + "px";
             symbol.style.top = y + "px";
         };

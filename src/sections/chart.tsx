@@ -21,6 +21,13 @@ width: 100%;
 height: 100%;
 `
 
+interface ICoord{
+    x: number,
+    y: number,
+    shiftX: number,
+    shiftY: number,
+}
+
 const Chart = () => {
     const dispatch = useAppDispatch();
     const symbols = useAppSelector(state => state.symbols.symbols);
@@ -38,26 +45,32 @@ const Chart = () => {
         dispatch(setEnd([]));
     };
 
-    const coordCalc: { (symbolIdx: number, btnIdx: number): { x: number, y: number } | void } = (symbolIdx, btnIdx) => {
+    const coordCalc: { (symbolIdx: number, btnIdx: number): ICoord} = (symbolIdx, btnIdx) => {
         let x = refArr[symbolIdx].current!.offsetLeft;
         let y = refArr[symbolIdx].current!.offsetTop;
+        let shiftX = 0;
+        let shiftY = 0;
         switch (btnIdx) {
             case 0:
                 x += symbols[symbolIdx].width / 2;
+                shiftY = -50;
                 break;
             case 1:
                 x += symbols[symbolIdx].width;
                 y += symbols[symbolIdx].height / 2;
+                shiftX = 50;
                 break;
             case 2:
                 x += symbols[symbolIdx].width / 2;
                 y += symbols[symbolIdx].height;
+                shiftY = 50
                 break;
             case 3:
                 y += symbols[symbolIdx].height / 2;
+                shiftX = -50;
                 break;
         }
-        return { x, y }
+        return { x, y, shiftX, shiftY }
     };
 
     useEffect(() => {
@@ -85,10 +98,17 @@ const Chart = () => {
             const temp = [...prev];
             temp.push(createRef());
             return temp;
-        })
-        if (!ref.current) return;
-        setWidth(ref.current.offsetWidth);
-        setHeight(ref.current.offsetHeight)
+        }) //여기까지 임시 데이터들
+        const resize = () => {
+            if (!ref.current) return;
+            setWidth(ref.current.offsetWidth);
+            setHeight(ref.current.offsetHeight);
+        }
+        resize();
+        window.addEventListener('resize', resize);
+        return () => {
+            window.removeEventListener('resize', resize);
+        }
     }, []);
 
     useEffect(() => {
@@ -97,15 +117,27 @@ const Chart = () => {
     }, [start, end]);
     
     useEffect(() => {
+        if (!canvasRef.current) return;
+        const ctx = canvasRef.current.getContext("2d");
+        if (!ctx) return;
+        ctx.clearRect(0, 0, width, height);
+        ctx.beginPath();
         flows.forEach((flow, symbolIdx) => {
             flow.forEach((value, btnIdx) => {
                 if (value.length == 0) return;
-                const start = coordCalc(symbolIdx, btnIdx);
-                const end = coordCalc(value[0], value[1]);
-                console.log(start, end);
-            })
-        })
-    }, [flows]);
+                const start: ICoord = coordCalc(symbolIdx, btnIdx);
+                const end: ICoord = coordCalc(value[0], value[1]);
+                if (symbolIdx == value[0] && btnIdx == value[1]) return;
+                ctx.moveTo(start.x, start.y);
+                start.x += start.shiftX;
+                start.y += start.shiftY;
+                ctx.arcTo(start.x, start.y, end.x, start.y, 30);
+                ctx.arcTo(end.x, start.y, end.x, end.y, 30);
+                ctx.lineTo(end.x, end.y);
+            });
+        });
+        ctx.stroke();
+    }, [flows, symbols, width, height]);
 
     return (
         <Section
