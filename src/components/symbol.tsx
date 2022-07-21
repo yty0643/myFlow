@@ -38,19 +38,10 @@ ${({index}) => {
             `;
         case 1:
             return `
-            top: 50%;
-            left: 100%;
-            `;
-        case 2:
-            return `
             top: 100%;
             left: 50%;
             `;
-        case 3:
-            return `
-            top: 50%;
-            left: 0;
-            `;
+
     }
 }}
 width: 10px;
@@ -61,7 +52,7 @@ transform: translate(-50%, -50%);
 
 const Symbol = ({ divRef, value, index }: { divRef: RefObject<HTMLDivElement>, value: ISymbol, index: number }) => {
     const dispatch = useAppDispatch();
-    const btnArr = [0, 1, 2, 3];
+    const btnArr = [0, 1];
 
     const onMouseDown = (event: React.MouseEvent) => {
         event.stopPropagation();

@@ -9,7 +9,7 @@ interface ISelectedInit{
     //     start: number[],
     //     end: number[]
     // }[],
-    flows: number[][][];
+    flows: number[][][][];
 };
 
 const initialState: ISelectedInit = {
@@ -26,7 +26,10 @@ export const flowsSlice = createSlice({
             state.flows.push([[],[],[],[]]);
         },
         setFlows: (state, action) => {
-            state.flows[action.payload.start[0]][action.payload.start[1]] = action.payload.end;
+            state.flows[action.payload.start[0]][action.payload.start[1]].push(action.payload.end);
+        },
+        delFlows: (state, action) => {
+            state.flows[action.payload.start[0]][action.payload.start[1]] = [];
         },
         setStart: (state, action) => {
             state.start = action.payload;
@@ -37,5 +40,5 @@ export const flowsSlice = createSlice({
     },
 });
 
-export const { pushFlows, setFlows, setStart, setEnd } = flowsSlice.actions;
+export const { pushFlows, setFlows, delFlows, setStart, setEnd } = flowsSlice.actions;
 export default flowsSlice.reducer;

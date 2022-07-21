@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import Flow from '../components/flow';
 import Symbol from '../components/symbol';
-import { pushFlows, setEnd, setFlows, setStart } from '../features/flows/flowsSlice';
+import { delFlows, pushFlows, setEnd, setFlows, setStart } from '../features/flows/flowsSlice';
 import { setSymbols } from '../features/symbols/symbolsSlice';
 
 const Section = styled.section`
@@ -24,8 +24,6 @@ height: 100%;
 interface ICoord{
     x: number,
     y: number,
-    shiftX: number,
-    shiftY: number,
 }
 
 const Chart = () => {
@@ -48,29 +46,16 @@ const Chart = () => {
     const coordCalc: { (symbolIdx: number, btnIdx: number): ICoord} = (symbolIdx, btnIdx) => {
         let x = refArr[symbolIdx].current!.offsetLeft;
         let y = refArr[symbolIdx].current!.offsetTop;
-        let shiftX = 0;
-        let shiftY = 0;
         switch (btnIdx) {
             case 0:
                 x += symbols[symbolIdx].width / 2;
-                shiftY = -50;
                 break;
             case 1:
-                x += symbols[symbolIdx].width;
-                y += symbols[symbolIdx].height / 2;
-                shiftX = 50;
-                break;
-            case 2:
                 x += symbols[symbolIdx].width / 2;
                 y += symbols[symbolIdx].height;
-                shiftY = 50
-                break;
-            case 3:
-                y += symbols[symbolIdx].height / 2;
-                shiftX = -50;
                 break;
         }
-        return { x, y, shiftX, shiftY }
+        return { x, y }
     };
 
     useEffect(() => {
@@ -86,9 +71,21 @@ const Chart = () => {
             width: 200,
             height: 100,
         }
-        dispatch(setSymbols([temp, temp2]));
+        const temp3 = {
+            x: 100,
+            y: 100,
+            width: 200,
+            height: 100,
+        }
+        dispatch(setSymbols([temp, temp2, temp3]));
         dispatch(pushFlows());
         dispatch(pushFlows());
+        dispatch(pushFlows());
+        setRefArr(prev => {
+            const temp = [...prev];
+            temp.push(createRef());
+            return temp;
+        })
         setRefArr(prev => {
             const temp = [...prev];
             temp.push(createRef());
@@ -113,6 +110,9 @@ const Chart = () => {
 
     useEffect(() => {
         if (start.length == 0 || end.length == 0) return;
+        if (start[0] != end[0] && start[1] == end[1]) return;
+        if (start[1] == end[1])
+            dispatch(delFlows({ start }));
         dispatch(setFlows({ start, end }));
     }, [start, end]);
     
@@ -125,15 +125,33 @@ const Chart = () => {
         flows.forEach((flow, symbolIdx) => {
             flow.forEach((value, btnIdx) => {
                 if (value.length == 0) return;
-                const start: ICoord = coordCalc(symbolIdx, btnIdx);
-                const end: ICoord = coordCalc(value[0], value[1]);
-                if (symbolIdx == value[0] && btnIdx == value[1]) return;
-                ctx.moveTo(start.x, start.y);
-                start.x += start.shiftX;
-                start.y += start.shiftY;
-                ctx.arcTo(start.x, start.y, end.x, start.y, 30);
-                ctx.arcTo(end.x, start.y, end.x, end.y, 30);
-                ctx.lineTo(end.x, end.y);
+                value.forEach((val) => {
+                    if (symbolIdx == val[0] && btnIdx == val[1]) return;
+                    let start: ICoord;
+                    let end: ICoord;
+                    let startShiftY;
+                    let endShiftY;
+                    if (btnIdx == 0) {
+                        start = coordCalc(val[0], val[1]);
+                        end= coordCalc(symbolIdx, btnIdx);
+                    } else {
+                        start = coordCalc(symbolIdx, btnIdx);
+                        end = coordCalc(val[0], val[1]);
+                    }
+                    if (start.y - end.y > 0) {
+                        startShiftY = 30;
+                        endShiftY = 30;
+                    } else {
+                        startShiftY = Math.abs(start.y - end.y) / 2;
+                        endShiftY = Math.abs(start.y - end.y) / 2;
+                    }
+                    let startY = start.y + startShiftY;
+                    let endY = end.y - endShiftY;
+                    ctx.moveTo(start.x, start.y);
+                    ctx.arcTo(start.x, startY, end.x, endY, 10);
+                    ctx.arcTo(end.x, endY, end.x, end.y, 10);
+                    ctx.lineTo(end.x, end.y);
+                });
             });
         });
         ctx.stroke();
