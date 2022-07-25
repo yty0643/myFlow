@@ -4,15 +4,17 @@ import { createGlobalStyle } from 'styled-components'
 interface IGS{
     isDark: boolean;
 }
+
+// ${({ theme, isDark }) => {
+//     const color = theme.textColor[isDark ? "light" : "dark"];
+//     return `
+//         color: ${color}
+//     `
+//     }}
+
 export const GlobalStyle = createGlobalStyle<IGS>`
     *{
         box-sizing: border-box;
-        ${({ theme, isDark }) => {
-        const color = theme.textColor[isDark ? "light" : "dark"];
-        return `
-            color: ${color}
-        `
-        }}
     }
 
     body {

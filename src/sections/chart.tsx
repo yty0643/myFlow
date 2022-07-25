@@ -5,20 +5,49 @@ import Flow from '../components/flow';
 import Symbol from '../components/symbol';
 import { delFlows, pushFlows, setEnd, setFlows, setStart } from '../features/flows/flowsSlice';
 import { setSymbols } from '../features/symbols/symbolsSlice';
+import { faBars, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import CanvasBtn from '../components/canvas_btn';
 
-const Section = styled.section`
+interface ISection{
+    scale: number;
+}
+
+const Section = styled.section<ISection>`
 position: relative;
 display: flex;
 margin-top: 100px; // section이 아래로 가는 상황 연출용임.
 width: 100%;
 height: 100vh;
-background-color: grey;
+${({ scale }) => `
+transform: scale(0.7)
+
+`}
 `
 
+
 const Canvas = styled.canvas`
-background-color: rgb(240,240,240);
+background-color: transparent;
 width: 100%;
 height: 100%;
+// background-color: grey;
+
+// background-repeat: repeat;
+background-color: #fff;
+// min-height: 50vh;
+
+background-image: linear-gradient(to bottom, transparent, transparent 20%, #fff 20%, #fff 90%, transparent 90%),
+linear-gradient(to right, transparent, transparent 20%, #fff 20%, #fff 90%, transparent 90%),
+linear-gradient(to right, #eee, #eee 20%, #fff 20%, #fff 90%, #eee 90%);
+background-size: 10px 10px; 
+`
+
+const Btns = styled.div`
+position: absolute;
+top: 0;
+right: 0;
+display: flex;
+justify-content: center;
+align-items: center;
 `
 
 interface ICoord{
@@ -33,6 +62,7 @@ const Chart = () => {
     const start = useAppSelector(state => state.flows.start);
     const end = useAppSelector(state => state.flows.end);
     const ref = useRef<HTMLElement>(null);
+    const [scale, setScale] = useState<number>(1);
     const [refArr, setRefArr] = useState<RefObject<HTMLDivElement>[]>([]);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [width, setWidth] = useState<number>(0);
@@ -43,7 +73,7 @@ const Chart = () => {
         dispatch(setEnd([]));
     };
 
-    const coordCalc: { (symbolIdx: number, btnIdx: number): ICoord} = (symbolIdx, btnIdx) => {
+    const coordCalc: { (symbolIdx: number, btnIdx: number): ICoord } = (symbolIdx, btnIdx) => {
         let x = refArr[symbolIdx].current!.offsetLeft;
         let y = refArr[symbolIdx].current!.offsetTop;
         switch (btnIdx) {
@@ -57,6 +87,29 @@ const Chart = () => {
         }
         return { x, y }
     };
+
+    const zoomIn = () => {
+        setScale((prev) => {
+            if (prev >= 1.3)
+                return prev;
+            else
+                return prev + 0.1;
+        })
+    }
+    const zoomOut = () => {
+        setScale((prev) => {
+            if (prev <= 0.7)
+                return prev;
+            else
+                return prev - 0.1;
+        })
+    }
+    const menuToggle = () => {
+        console.log("menuToggle");
+    }
+    useEffect(() => { 
+        console.log("H");
+    }, [scale]);
 
     useEffect(() => {
         const temp = {
@@ -133,12 +186,12 @@ const Chart = () => {
                     let endShiftY;
                     if (btnIdx == 0) {
                         start = coordCalc(val[0], val[1]);
-                        end= coordCalc(symbolIdx, btnIdx);
+                        end = coordCalc(symbolIdx, btnIdx);
                     } else {
                         start = coordCalc(symbolIdx, btnIdx);
                         end = coordCalc(val[0], val[1]);
                     }
-                    if (start.y - end.y > 0) {
+                    if (start.y - end.y >= 0) {
                         startShiftY = 30;
                         endShiftY = 30;
                     } else {
@@ -160,6 +213,7 @@ const Chart = () => {
     return (
         <Section
             ref={ref}
+            scale={scale}
             onMouseDown={initFlow}
             onMouseUp={initFlow}
             onDragStart={() => { return false }}>
@@ -174,6 +228,11 @@ const Chart = () => {
                     index={index}
                     value={value} />
             )}
+            <Btns>
+                <CanvasBtn icon={faPlus} onClick={zoomIn} />
+                <CanvasBtn icon={faMinus} onClick={zoomOut} />
+                <CanvasBtn icon={faBars} onClick={menuToggle} />
+            </Btns>
         </Section>
     );
 };

@@ -1,3 +1,5 @@
+import { faDatabase } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { createRef, RefObject, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch } from '../app/hooks';
@@ -14,20 +16,22 @@ position: absolute;
 top: 0;
 left: 0;
 display: flex;
+flex-direction: column;
 ${({ width, height }) => `
 width: ${width}px;
 height: ${height}px;
 `
 }
-
-background-color: skyblue;
+border-radius: 8px;
+border: 1px solid black;
+background-color: white;
 `
 
-interface IButton{
+interface IFlowBtn{
     index: number,
 }
 
-const Button = styled.button<IButton>`
+const FlowBtn = styled.button<IFlowBtn>`
 position: absolute;
 ${({index}) => {
     switch (index) {
@@ -48,6 +52,41 @@ width: 10px;
 height: 10px;
 background-color: black;
 transform: translate(-50%, -50%);
+`
+
+const SideBtn = styled.button`
+position: absolute;
+top: 0;
+left: 100%;
+width: 1rem;
+height: 1rem;
+background-color: black;
+`
+
+const Upper = styled.div`
+display: flex;
+align-items: center;
+width: 100%;
+padding: 0.5rem 1.5rem;
+font-size: 1rem;
+font-weight: 500;
+`
+const Horizontal = styled.div`
+width: 100%;
+height: 0.5px;
+background-color: black;
+`
+
+const Lower = styled.div`
+display: flex;
+align-items: center;
+padding: 0.5rem 1.5rem;
+font-size: 0.8rem;
+font-weight: 300;
+`
+
+const Icon = styled.div`
+padding-right: 0.5rem;
 `
 
 const Symbol = ({ divRef, value, index }: { divRef: RefObject<HTMLDivElement>, value: ISymbol, index: number }) => {
@@ -106,6 +145,11 @@ const Symbol = ({ divRef, value, index }: { divRef: RefObject<HTMLDivElement>, v
         dispatch(setEnd([index, Number(event.currentTarget.id)]));
     }
 
+    const onClick = (event: React.MouseEvent) => {
+        event.stopPropagation();
+        console.log("H");
+    };
+
     useEffect(() => {
         if (!divRef || !divRef.current) return;
         const symbol = divRef.current;
@@ -119,8 +163,18 @@ const Symbol = ({ divRef, value, index }: { divRef: RefObject<HTMLDivElement>, v
             onMouseDown={onMouseDown}
             width={value.width}
             height={value.height}>
+            <Upper>
+                <Icon>
+                    <FontAwesomeIcon icon={faDatabase} />
+                </Icon>
+                <p>title</p>
+            </Upper>
+            <Horizontal/>
+            <Lower>
+                <p>desc</p>
+            </Lower>
             {btnArr.map((value, index) =>
-                <Button
+                <FlowBtn
                     key={index}
                     id={`${index}`}
                     index={index}
@@ -129,6 +183,7 @@ const Symbol = ({ divRef, value, index }: { divRef: RefObject<HTMLDivElement>, v
                     onDragStart={() => { return false }}
                 />
             )}
+            <SideBtn onMouseDown={onClick} />
         </Div>
     );
 };
