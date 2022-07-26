@@ -99,7 +99,7 @@ const Symbol = ({ divRef, value, index }: { divRef: RefObject<HTMLDivElement>, v
         const symbol = divRef.current;
         const shiftX = event.nativeEvent.offsetX;
         const shiftY = event.nativeEvent.offsetY;
-        const topY = event.currentTarget.parentElement!.offsetTop;
+        const topY = event.currentTarget.parentElement!.parentElement!.offsetTop;
         const maxX = event.currentTarget.parentElement!.offsetWidth - symbol.offsetWidth;
         const maxY = event.currentTarget.parentElement!.offsetHeight - symbol.offsetHeight;
 
@@ -114,6 +114,9 @@ const Symbol = ({ divRef, value, index }: { divRef: RefObject<HTMLDivElement>, v
             y = Math.round(y / 10) * 10;
             symbol.style.left = x + "px";
             symbol.style.top = y + "px";
+            console.log(x,y);
+            console.log(event.offsetX);
+
         };
 
         document.addEventListener('mousemove', move);
@@ -147,7 +150,6 @@ const Symbol = ({ divRef, value, index }: { divRef: RefObject<HTMLDivElement>, v
 
     const onClick = (event: React.MouseEvent) => {
         event.stopPropagation();
-        console.log("H");
     };
 
     useEffect(() => {

@@ -5,5 +5,8 @@
     pointer-events: all !important;
     color: red !important;
     width: calc(100px * 2px);
+    overflow: hidden;
+    touch-action: none;
+    pointer-events: none;
 }
 

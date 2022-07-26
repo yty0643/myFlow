@@ -18,6 +18,7 @@ color: black;
 `
 
 const CanvasBtn = ({ icon, onClick }: { icon: IconDefinition, onClick: () => void }) => {
+    
     return (
         <Button onClick={onClick}>
             <FontAwesomeIcon icon={icon} />

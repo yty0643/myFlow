@@ -1,35 +1,25 @@
 import React, { createRef, RefObject, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import Flow from '../components/flow';
 import Symbol from '../components/symbol';
 import { delFlows, pushFlows, setEnd, setFlows, setStart } from '../features/flows/flowsSlice';
 import { setSymbols } from '../features/symbols/symbolsSlice';
 import { faBars, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import CanvasBtn from '../components/canvas_btn';
 
-interface ISection{
-    scale: number;
-}
-
-const Section = styled.section<ISection>`
+const Section = styled.section`
 position: relative;
 display: flex;
 margin-top: 100px; // section이 아래로 가는 상황 연출용임.
 width: 100%;
 height: 100vh;
-${({ scale }) => `
-transform: scale(0.7)
-
-`}
+overflow: hidden;
 `
-
 
 const Canvas = styled.canvas`
 background-color: transparent;
 width: 100%;
 height: 100%;
-// background-color: grey;
 
 // background-repeat: repeat;
 background-color: #fff;
@@ -38,7 +28,29 @@ background-color: #fff;
 background-image: linear-gradient(to bottom, transparent, transparent 20%, #fff 20%, #fff 90%, transparent 90%),
 linear-gradient(to right, transparent, transparent 20%, #fff 20%, #fff 90%, transparent 90%),
 linear-gradient(to right, #eee, #eee 20%, #fff 20%, #fff 90%, #eee 90%);
-background-size: 10px 10px; 
+background-size: 10px 10px;
+`
+
+interface IDiv{
+    scale: number,
+}
+const Div = styled.div<IDiv>`
+position: relative;
+width: 100%
+height: 100%;
+${({ scale }) => `
+transform: scale(${scale});
+`}
+`
+const Cover = styled.div`
+z-index:4;
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+touch-action: none;
+pointer-events: none;
 `
 
 const Btns = styled.div`
@@ -89,27 +101,18 @@ const Chart = () => {
     };
 
     const zoomIn = () => {
-        setScale((prev) => {
-            if (prev >= 1.3)
-                return prev;
-            else
-                return prev + 0.1;
-        })
+        setScale(prev => {
+            return prev + 0.1;
+        });
     }
     const zoomOut = () => {
-        setScale((prev) => {
-            if (prev <= 0.7)
-                return prev;
-            else
-                return prev - 0.1;
-        })
+        setScale(prev => {
+            return prev - 0.1;
+        });
     }
     const menuToggle = () => {
         console.log("menuToggle");
     }
-    useEffect(() => { 
-        console.log("H");
-    }, [scale]);
 
     useEffect(() => {
         const temp = {
@@ -213,21 +216,24 @@ const Chart = () => {
     return (
         <Section
             ref={ref}
-            scale={scale}
             onMouseDown={initFlow}
             onMouseUp={initFlow}
             onDragStart={() => { return false }}>
-            <Canvas
-                ref={canvasRef}
-                width={width}
-                height={height} />
-            {symbols.map((value, index) =>
-                <Symbol
-                    key={index}
-                    divRef={refArr[index]}
-                    index={index}
-                    value={value} />
-            )}
+            <Div
+                scale={scale}>
+                <Canvas
+                    ref={canvasRef}
+                    width={width}
+                    height={height} />
+                {symbols.map((value, index) =>
+                    <Symbol
+                        key={index}
+                        divRef={refArr[index]}
+                        index={index}
+                        value={value} />
+                )}
+                <Cover onMouseDown={() => { console.log("G"); }} />
+            </Div>
             <Btns>
                 <CanvasBtn icon={faPlus} onClick={zoomIn} />
                 <CanvasBtn icon={faMinus} onClick={zoomOut} />
